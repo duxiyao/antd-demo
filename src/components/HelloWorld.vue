@@ -55,7 +55,7 @@
 </template>
 
 <script>
-    import {test} from "../api"
+    import api from "../api"
 
     export default {
         name: 'HelloWorld',
@@ -67,7 +67,10 @@
         },
         methods:{
             async _test() {
-                await test();
+                await api.allFiles();
+                await api.allKeys({filename:'mmkv.default'});
+                // let res = await test();
+                // console.log('res='+JSON.stringify(res))
             },
         }
     }

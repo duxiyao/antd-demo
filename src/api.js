@@ -1,10 +1,12 @@
 import axios from "axios";
-import coreBus from "./event-bus"
+// import coreBus from "./event-bus"
 
-// 添加响应拦截器
+// let instance = axios.create({timeout: 1000 * 12});
+
+//region 添加响应拦截器
 axios.interceptors.response.use(
     (response) => {
-        let codeArr = [-1, 1, 1004, 1009];
+        let codeArr = [-1, 1, 1004, 1009,];
         let errorTxt,
             codeObj = {
                 "-1": "error",
@@ -13,12 +15,13 @@ axios.interceptors.response.use(
                 "1009": "获取信息失败",
             };
 
-        errorTxt = codeObj[response.data.code] || "未知错误";
+        errorTxt = codeObj[response.data.errorCode] || "未知错误";
 
-        if (codeArr.includes(response.data.code)) {
-            coreBus.$emit("MiLive-UI:tips", {
-                msg: errorTxt,
-            });
+        if (codeArr.includes(response.data.errorCode)) {
+            console.log('axios:' + errorTxt)
+            // coreBus.$emit("MiLive-UI:tips", {
+            //     msg: errorTxt,
+            // });
         }
 
         return response;
@@ -26,7 +29,7 @@ axios.interceptors.response.use(
     (error) => {
         let errStatusArr = [400, 401, 403, 404, 405, 500],
             statusObj = {
-                400: "错误请求",
+                400: "错误请求，参数",
                 401: "验证失败",
                 403: "拒绝访问",
                 404: "活动未开始~",
@@ -35,35 +38,33 @@ axios.interceptors.response.use(
             },
             errorStatusTxt;
 
+        // console.log('--' + JSON.stringify(error.response))
         if (error && error.response) {
-            if (errStatusArr.indexOf(error.response.status)) {
+            if (errStatusArr.indexOf(error.response.status) > -1) {
                 errorStatusTxt = statusObj[error.response.status] || "网络错误";
-                coreBus.$emit("MiLive-UI:tips", {
-                    msg: errorStatusTxt,
-                });
+                // coreBus.$emit("MiLive-UI:tips", {
+                //     msg: errorStatusTxt,
+                // });
+                console.log('axios:' + errorStatusTxt)
             }
+            return error.response;
         }
     }
 );
+//endregion
 
+const host = 'http://10.220.186.53:8081'
 
-
-export const test = async data => {
+const allFiles = async data => {
     let params = Object.assign({}, data, {
         // uuid,
-        // actId: ACT_ID,
         // rankType: 0,
         // needGap:true,
-        // needContribute:true,
-        // needRegister:true,
-        // levelName:"total",
-        // needFollow:false,
         // rankName,
         // date: 0,
     });
 
-    // let url = `${GET_ANCHOR_INFO}/${ACT_ID}/anchorInfo`;
-    let url = `https://www.baidu.com/`;
+    let url = `${host}/kv/allFiles`;
 
     return await axios.get(url, {
         params
@@ -71,4 +72,26 @@ export const test = async data => {
         return data
     })
 
+}
+
+const allKeys = async data => {
+    let params = Object.assign({}, data, {
+        // uuid,
+        // needFollow:false,
+        // rankName,
+        // date: 0,
+    });
+
+    let url = `${host}/kv/allkeys`;
+
+    return await axios.get(url, {
+        params
+    }).then(function ({data}) {
+        return data
+    })
+}
+
+export default {
+    allFiles,
+    allKeys,
 }

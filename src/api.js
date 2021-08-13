@@ -1,5 +1,5 @@
 import axios from "axios";
-// import coreBus from "./event-bus"
+import coreBus from "./event-bus"
 
 // let instance = axios.create({timeout: 1000 * 12});
 
@@ -19,9 +19,9 @@ axios.interceptors.response.use(
 
         if (codeArr.includes(response.data.errorCode)) {
             console.log('axios:' + errorTxt)
-            // coreBus.$emit("MiLive-UI:tips", {
-            //     msg: errorTxt,
-            // });
+            coreBus.$emit("error:tips", {
+                msg: errorTxt,
+            });
         }
 
         return response;
@@ -42,9 +42,9 @@ axios.interceptors.response.use(
         if (error && error.response) {
             if (errStatusArr.indexOf(error.response.status) > -1) {
                 errorStatusTxt = statusObj[error.response.status] || "网络错误";
-                // coreBus.$emit("MiLive-UI:tips", {
-                //     msg: errorStatusTxt,
-                // });
+                coreBus.$emit("error:tips", {
+                    msg: errorStatusTxt,
+                });
                 console.log('axios:' + errorStatusTxt)
             }
             return error.response;
@@ -53,7 +53,8 @@ axios.interceptors.response.use(
 );
 //endregion
 
-const host = 'http://10.220.186.53:8081'
+// const host = 'http://10.220.182.220:8081'
+const host = ''
 
 const allFiles = async data => {
     let params = Object.assign({}, data, {
@@ -90,8 +91,23 @@ const allKeys = async data => {
         return data
     })
 }
+const getContent = async data => {
+    let params = Object.assign({}, data, {
+        // uuid,
+        // date: 0,
+    });
+
+    let url = `${host}/kv/content`;
+
+    return await axios.get(url, {
+        params
+    }).then(function ({data}) {
+        return data
+    })
+}
 
 export default {
     allFiles,
     allKeys,
+    getContent,
 }

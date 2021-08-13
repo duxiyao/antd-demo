@@ -69,6 +69,7 @@
             async _test() {
                 await api.allFiles();
                 await api.allKeys({filename:'mmkv.default'});
+                await api.allKeys({filename:''});
                 // let res = await test();
                 // console.log('res='+JSON.stringify(res))
             },

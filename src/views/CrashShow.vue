@@ -37,6 +37,13 @@
             this.getAllFiles()
         },
         methods: {
+            reset() {
+                this.allKeys = [];
+                this.keyIndex = -1;
+                this.pre = '';
+                this.content = '';
+                this.info = [];
+            },
             async getAllFiles() {
                 let ret = await api.allFiles();
                 if (ret.isSuccess && ret.data) {
@@ -46,6 +53,7 @@
             async getAllKeys(fn, index) {
                 this.fnIndex = index
                 let ret = await api.allKeys({filename: fn});
+                this.reset()
                 if (ret.isSuccess && ret.data) {
                     this.fn = fn
                     this.allKeys = ret.data
@@ -60,7 +68,7 @@
 
                     this.pre = str.substr(0, preIndex)
                     console.log(this.pre)
-                    let contents=str.substr(preIndex).split("crashinfo:")
+                    let contents = str.substr(preIndex).split("crashinfo:")
                     this.content = contents[0]
                     this.info = contents[1].split("\t")
                 }
@@ -119,23 +127,24 @@
         //text-overflow: ellipsis;
         //white-space: normal;
 
-        span{
+        span {
             background: red;
             color: white;
         }
 
-        .info{
+        .info {
             margin-top: __vw(10);
-            span{
+
+            span {
                 margin-right: __vw(10);
                 background: greenyellow;
-                color:red;
+                color: red;
                 padding: __vw(4);
             }
         }
     }
 
-    pre{
+    pre {
         padding: 12px;
         font-size: 10pt;
         background-color: #fafafa;

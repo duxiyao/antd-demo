@@ -32,7 +32,7 @@ axios.interceptors.response.use(
                 400: "错误请求，参数",
                 401: "验证失败",
                 403: "拒绝访问",
-                404: "活动未开始~",
+                404: "404~",
                 405: "请求方法不允许",
                 500: "服务器错误",
             },
@@ -53,7 +53,7 @@ axios.interceptors.response.use(
 );
 //endregion
 
-// const host = 'http://10.220.182.220:8081'
+// const host = 'http://10.220.174.97:8081'
 const host = ''
 
 const allFiles = async data => {

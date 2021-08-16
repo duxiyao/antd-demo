@@ -10,7 +10,7 @@
             </li>
         </ul>
         <div v-show="keyIndex!=-1" class="txt"><span>{{pre}}</span>
-            <div>{{content}}</div>
+            <pre>{{content}}</pre>
             <div class="info"><span v-for="item in info" :key="item">{{item}} </span></div>
         </div>
     </div>
@@ -133,5 +133,13 @@
                 padding: __vw(4);
             }
         }
+    }
+
+    pre{
+        padding: 12px;
+        font-size: 10pt;
+        background-color: #fafafa;
+        border: 1px solid #ccc;
+        overflow-x: auto;
     }
 </style>
